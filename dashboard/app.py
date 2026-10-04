@@ -4,8 +4,15 @@ Interactive Streamlit application powered by PySpark, Parquet, and Stream/ML Alg
 """
 
 import os
+import sys
 import json
 import time
+
+# Ensure project root is always in sys.path (needed when running `streamlit run dashboard/app.py`)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -47,8 +54,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+GOLD_DIR = os.path.join(PROJECT_ROOT, "data", "gold")
+CLEAN_DIR = os.path.join(PROJECT_ROOT, "data", "clean")
+
+
 @st.cache_resource
-def load_bloom_filter(gold_dir: str = "data/gold", clean_dir: str = "data/clean"):
+def load_bloom_filter(gold_dir: str = GOLD_DIR, clean_dir: str = CLEAN_DIR):
     """Loads and caches the populated Bloom filter for real-time lookups."""
     iocs_path = os.path.join(clean_dir, "threat_iocs.parquet")
     if not os.path.exists(iocs_path):
@@ -62,7 +73,7 @@ def load_bloom_filter(gold_dir: str = "data/gold", clean_dir: str = "data/clean"
 
 
 @st.cache_data
-def load_gold_data(gold_dir: str = "data/gold"):
+def load_gold_data(gold_dir: str = GOLD_DIR):
     """Loads pre-aggregated Gold Parquet tables and metadata."""
     data = {}
     summary_path = os.path.join(gold_dir, "gold_summary.json")
@@ -242,7 +253,7 @@ elif nav_choice == "⚡ Live Monitor & IP Checker":
 
     with c_dgim2:
         # Load sample live events from clean logs
-        logs_parquet = os.path.join("data/clean", "logs.parquet")
+        logs_parquet = os.path.join(CLEAN_DIR, "logs.parquet")
         if os.path.exists(logs_parquet):
             df_sample = pd.read_parquet(logs_parquet).tail(8)[["Timestamp", "Src_IP", "Dst_IP", "Dst_Port", "Label", "is_attack"]]
             st.markdown("##### 🔴 Live Stream Ticker (Reservoir Sample)")
