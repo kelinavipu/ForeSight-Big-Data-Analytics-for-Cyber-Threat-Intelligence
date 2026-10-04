@@ -41,6 +41,9 @@
       <li class="nav-item" data-target="view-benchmarks">
         <span>📊</span> Algorithm Benchmarks
       </li>
+      <li class="nav-item" data-target="view-spark">
+        <span>🔥</span> Apache Spark Engine
+      </li>
       <li class="nav-item" data-target="view-academy">
         <span>🎓</span> Threat Academy
       </li>
@@ -400,6 +403,75 @@
             <b>Plain English:</b> Attackers send quick probe packets across all 65,535 network ports to see which services are open and might have vulnerable software.<br>
             <b>MITRE ATT&CK:</b> <code>T1046 - Network Service Discovery</code> | <b>Defense:</b> Stealth firewall rules and automated IP blacklisting.
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW: APACHE SPARK ENGINE                  -->
+    <!-- ========================================== -->
+    <section id="view-spark" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Apache Spark Distributed Engine</h1>
+        <p class="page-desc">PySpark 3.5 distributed batch ETL, multi-core shuffle partitions, and Catalyst query optimizer.</p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Spark Version</div>
+          <div class="kpi-value" style="color: #00D2FF;">3.5.1</div>
+          <div class="kpi-sub" style="color: #38BDF8;">PySpark Runtime</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cluster Mode</div>
+          <div class="kpi-value" style="color: #F8FAFC; font-size: 1.5rem;">local[*]</div>
+          <div class="kpi-sub" style="color: #A78BFA;">All CPU Worker Cores</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Shuffle Partitions</div>
+          <div class="kpi-value" style="color: #FF2A85;">4</div>
+          <div class="kpi-sub" style="color: #FDA4AF;">Parallel Task Queues</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Driver Memory</div>
+          <div class="kpi-value" style="color: #10B981;">2 GB</div>
+          <div class="kpi-sub" style="color: #6EE7B7;">In-Memory Execution</div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">⚡ Distributed Spark DAG (Directed Acyclic Graph) Execution Flow</div>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px;">
+          <div class="cluster-card" style="flex: 1; min-width: 200px; border-top-color: #00D2FF;">
+            <div style="font-weight: 700; color: #00D2FF; margin-bottom: 4px;">Stage 0: CSV FileScan</div>
+            <div style="font-size: 0.8rem; color: #94A3B8;">Distributed schema inference and partition chunking across CPU workers.</div>
+          </div>
+          <div class="cluster-card" style="flex: 1; min-width: 200px; border-top-color: #8B5CF6;">
+            <div style="font-weight: 700; color: #8B5CF6; margin-bottom: 4px;">Stage 1: Column Projection</div>
+            <div style="font-size: 0.8rem; color: #94A3B8;">Whitespace stripping, casting attack flags: <code>is_attack = Label != 'BENIGN'</code>.</div>
+          </div>
+          <div class="cluster-card" style="flex: 1; min-width: 200px; border-top-color: #EC4899;">
+            <div style="font-weight: 700; color: #EC4899; margin-bottom: 4px;">Stage 2: Hash Partition Shuffle</div>
+            <div style="font-size: 0.8rem; color: #94A3B8;">Wide dependency exchange routing attack records to identical partition buckets.</div>
+          </div>
+          <div class="cluster-card" style="flex: 1; min-width: 200px; border-top-color: #FF2A85;">
+            <div style="font-weight: 700; color: #FF2A85; margin-bottom: 4px;">Stage 3: HashAggregate Sink</div>
+            <div style="font-size: 0.8rem; color: #94A3B8;">Map-side parallel reduction & Snappy Columnar Parquet persistence.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">🖥️ How to Run & Show Live Spark to Your Evaluator</div>
+        <div style="background: #090B14; border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: monospace; font-size: 0.88rem; color: #38BDF8;">
+          python spark_demo.py
+        </div>
+        <div style="font-size: 0.86rem; color: #94A3B8; line-height: 1.6;">
+          Running <code>python spark_demo.py</code> in your terminal launches the live Apache Spark session and hosts the official <b>Spark Web UI</b> at:
+          <br>
+          👉 <a href="http://localhost:4040" target="_blank" style="color: #FF2A85; font-weight: 600; text-decoration: none;">http://localhost:4040</a>
+          <br>
+          Here, you can show your professor the live Spark DAG visualization, event timeline, executor task metrics, and Catalyst physical query plan!
         </div>
       </div>
     </section>
