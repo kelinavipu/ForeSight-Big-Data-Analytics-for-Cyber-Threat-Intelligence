@@ -24,7 +24,8 @@ wheels/
 *.egg
 
 # Streamlit
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 
 # Streaming temporary logs and events
 data/stream/*.json

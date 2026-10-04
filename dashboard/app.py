@@ -26,7 +26,8 @@ from dashboard.components.charts import (
     plot_geo_threat_map,
     plot_hourly_heatmap,
     plot_threat_network,
-    plot_benchmark_memory
+    plot_benchmark_memory,
+    apply_cyber_theme
 )
 from dashboard.components.explanations import (
     ATTACK_KNOWLEDGE_BASE,
@@ -42,14 +43,84 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling
+# Custom Styling (Atmospheric Cyberpunk City - Midnight Pink & Blue)
 st.markdown("""
 <style>
-    .main-header { font-size: 2.2rem; font-weight: 700; color: #1E293B; margin-bottom: 0px; }
-    .sub-header { font-size: 1.1rem; color: #64748B; margin-bottom: 20px; }
-    .metric-container { background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 15px; }
-    .headline-alert { background-color: #FEF2F2; border-left: 5px solid #EF4444; padding: 12px 18px; border-radius: 6px; margin-bottom: 20px; }
-    .analogy-card { background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .stApp {
+        background-color: #080A12;
+        background-image: radial-gradient(ellipse at 50% 0%, rgba(30, 27, 75, 0.45) 0%, rgba(8, 10, 18, 0.98) 75%);
+        color: #E2E8F0;
+    }
+    
+    .main-header {
+        font-size: 2.3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #00D2FF 0%, #C084FC 45%, #FF2A85 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 2px;
+        letter-spacing: -0.02em;
+    }
+    
+    .sub-header {
+        font-size: 1.05rem;
+        color: #94A3B8;
+        margin-bottom: 22px;
+    }
+    
+    .metric-container {
+        background: linear-gradient(135deg, rgba(18, 22, 41, 0.85) 0%, rgba(13, 16, 31, 0.75) 100%);
+        border: 1px solid rgba(0, 210, 255, 0.18);
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        color: #E2E8F0;
+    }
+    
+    .headline-alert {
+        background: linear-gradient(90deg, rgba(255, 42, 133, 0.15) 0%, rgba(18, 22, 41, 0.85) 100%);
+        border: 1px solid rgba(255, 42, 133, 0.35);
+        border-left: 4px solid #FF2A85;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 22px;
+        color: #F8FAFC;
+        box-shadow: 0 4px 15px rgba(255, 42, 133, 0.08);
+    }
+    
+    .analogy-card {
+        background: linear-gradient(135deg, rgba(18, 22, 41, 0.9) 0%, rgba(12, 15, 30, 0.8) 100%);
+        border: 1px solid rgba(0, 210, 255, 0.22);
+        border-radius: 9px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Sleek Cyber Inputs & Buttons */
+    div[data-testid="stTextInput"] input {
+        background-color: #0E1222 !important;
+        border: 1px solid rgba(0, 210, 255, 0.3) !important;
+        color: #F8FAFC !important;
+        border-radius: 8px !important;
+    }
+    div[data-testid="stTextInput"] input:focus {
+        border-color: #FF2A85 !important;
+        box-shadow: 0 0 8px rgba(255, 42, 133, 0.25) !important;
+    }
+    .stButton button {
+        background: linear-gradient(135deg, rgba(26, 31, 56, 0.9) 0%, rgba(18, 22, 41, 0.8) 100%) !important;
+        color: #00D2FF !important;
+        border: 1px solid rgba(0, 210, 255, 0.35) !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton button:hover {
+        border-color: #FF2A85 !important;
+        color: #FF2A85 !important;
+        box-shadow: 0 0 12px rgba(255, 42, 133, 0.2) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -168,11 +239,10 @@ if nav_choice == "🏠 Executive Overview":
                 x="Dst_Port",
                 y="count",
                 color="count",
-                color_continuous_scale="Reds",
-                labels={"Dst_Port": "Destination Port", "count": "Attack Attempts"},
-                title="Most Frequently Attacked Service Ports"
+                color_continuous_scale=[[0.0, "#1E1B4B"], [0.5, "#00D2FF"], [1.0, "#FF2A85"]],
+                labels={"Dst_Port": "Destination Port", "count": "Attack Attempts"}
             )
-            port_fig.update_layout(height=380, margin=dict(t=30, b=10, l=10, r=10))
+            apply_cyber_theme(port_fig, height=380, title="Most Frequently Attacked Service Ports")
             st.plotly_chart(port_fig, use_container_width=True)
             st.caption("ℹ️ **What does this mean?** Attackers focus heavily on standard service ports (e.g., 22 for SSH brute-force, 80/443 for web attacks).")
         else:
@@ -286,11 +356,11 @@ elif nav_choice == "🧩 Attack Patterns (Clusters)":
             for i, p in enumerate(profiles):
                 with cols[i % len(cols)]:
                     st.markdown(f"""
-                    <div class="metric-container">
-                        <h4>Group {p['cluster_id']}</h4>
-                        <p><b>Dominant:</b> {p['dominant_label']} ({p['purity_pct']}%)</p>
-                        <p><b>Risk:</b> {p['risk_level']}</p>
-                        <p style="font-size: 0.85rem; color: #475569;">{p['interpretation']}</p>
+                    <div class="metric-container" style="border-top: 3px solid #00D2FF;">
+                        <h4 style="color: #00D2FF; margin-top: 0; margin-bottom: 8px;">Group {p['cluster_id']}</h4>
+                        <p style="margin-bottom: 4px;"><b>Dominant:</b> <span style="color: #F8FAFC;">{p['dominant_label']}</span> ({p['purity_pct']}%)</p>
+                        <p style="margin-bottom: 6px;"><b>Risk:</b> {p['risk_level']}</p>
+                        <p style="font-size: 0.85rem; color: #94A3B8; line-height: 1.4;">{p['interpretation']}</p>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -358,9 +428,10 @@ elif nav_choice == "🧠 Association Rules (FP-Growth)":
         st.markdown("### 💡 Discovered Threat Insights:")
         for r in rules[:8]:
             st.markdown(f"""
-            <div class="analogy-card">
-                <b>📌 Pattern:</b> {r['plain_english']}<br>
-                <small style="color: #64748B;"><b>Confidence:</b> {r['confidence']*100:.1f}% | <b>Lift:</b> {r['lift']}x baseline | <b>Support:</b> {r['support']*100:.2f}%</small>
+            <div class="analogy-card" style="border-left: 3px solid #00D2FF;">
+                <div style="font-weight: 600; color: #00D2FF; margin-bottom: 5px;">📌 DISCOVERED CAUSAL RULE</div>
+                <div style="color: #F8FAFC; margin-bottom: 8px; font-size: 0.95rem;">{r['plain_english']}</div>
+                <small style="color: #94A3B8;"><b>Confidence:</b> <span style="color: #FF2A85;">{r['confidence']*100:.1f}%</span> | <b>Lift:</b> <span style="color: #38BDF8;">{r['lift']}x baseline</span> | <b>Support:</b> {r['support']*100:.2f}%</small>
             </div>
             """, unsafe_allow_html=True)
 
