@@ -187,11 +187,13 @@ Runs Bronze Ingestion $\rightarrow$ Silver Normalization $\rightarrow$ All 13 Al
 python run_pipeline.py
 ```
 
-### 5. Launch the ThreatLens Dashboard
+### 5. Launch the ThreatLens Web Dashboard (HTML/CSS & FastAPI)
 ```bash
-streamlit run dashboard/app.py
+python web_app.py
 ```
-Open **`http://localhost:8501`** in your browser!
+Open **`http://localhost:8000`** in your browser!
+
+*(Optional: If you prefer Streamlit, you can also run `streamlit run dashboard/app.py` on port 8501).*
 
 ### 6. Run Real-Time Streaming Replayer (Optional)
 To simulate a live high-speed network event stream:

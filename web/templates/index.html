@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreatLens | Cyber Threat Intelligence</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        <div class="brand-title">ThreatLens</div>
+        <div class="brand-subtitle">Cyber Intelligence</div>
+      </div>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item active" data-target="view-overview">
+        <span>🏠</span> Executive Overview
+      </li>
+      <li class="nav-item" data-target="view-live">
+        <span>⚡</span> Live Monitor & IP Checker
+      </li>
+      <li class="nav-item" data-target="view-clusters">
+        <span>🧩</span> Attack Patterns
+      </li>
+      <li class="nav-item" data-target="view-geo">
+        <span>🌍</span> Global Geo-Map
+      </li>
+      <li class="nav-item" data-target="view-graph">
+        <span>🕸️</span> Threat Infrastructure
+      </li>
+      <li class="nav-item" data-target="view-rules">
+        <span>🧠</span> Association Rules
+      </li>
+      <li class="nav-item" data-target="view-benchmarks">
+        <span>📊</span> Algorithm Benchmarks
+      </li>
+      <li class="nav-item" data-target="view-academy">
+        <span>🎓</span> Threat Academy
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div>Engine: <strong>Spark 3.5 & Parquet</strong></div>
+      <div>Feeds: <strong>abuse.ch & CISA</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Body -->
+  <main class="main-wrapper">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: EXECUTIVE OVERVIEW                -->
+    <!-- ========================================== -->
+    <section id="view-overview" class="view-section active">
+      <div class="page-header">
+        <h1 class="page-title">Executive Cyber Threat Overview</h1>
+        <p class="page-desc">Unified intelligence across public threat feeds and enterprise network flows.</p>
+      </div>
+
+      <!-- KPI Cards Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Flows Analyzed</div>
+          <div id="kpi-flows" class="kpi-value">--</div>
+          <div class="kpi-sub" style="color: #38BDF8;">⚡ PySpark & Parquet</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Threat IOCs Tracked</div>
+          <div id="kpi-iocs" class="kpi-value">--</div>
+          <div class="kpi-sub" style="color: #A78BFA;">🛡️ abuse.ch & CISA</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Unique Attackers</div>
+          <div id="kpi-attackers" class="kpi-value">--</div>
+          <div class="kpi-sub" style="color: #F472B6;">🎯 Flajolet–Martin O(1)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">C2 Feed Matches</div>
+          <div id="kpi-matches" class="kpi-value" style="color: #FF2A85;">--</div>
+          <div class="kpi-sub" style="color: #FDA4AF;">⚠️ Internal Bots Flagged</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Threat Posture</div>
+          <div class="kpi-value" style="color: #FF2A85; font-size: 1.4rem;">HIGH RISK</div>
+          <div class="kpi-sub" style="color: #CBD5E1;">🔴 Active Intrusion</div>
+        </div>
+      </div>
+
+      <!-- Headline Alert Banner -->
+      <div id="headline-alert-banner" class="headline-alert">
+        Loading headline correlation result...
+      </div>
+
+      <!-- Overview Charts Row -->
+      <div class="grid-2col">
+        <div class="card-panel">
+          <div class="panel-title">📊 Attack Category Mix</div>
+          <div style="height: 320px; position: relative;">
+            <canvas id="attackDonutChart"></canvas>
+          </div>
+          <div class="panel-caption">
+            ℹ️ <b>What does this mean?</b> Each slice represents an attack category observed on the network. Larger slices indicate higher frequency attack vectors.
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <div class="panel-title">🎯 Top Attacked Destination Ports</div>
+          <div style="height: 320px; position: relative;">
+            <canvas id="portsBarChart"></canvas>
+          </div>
+          <div class="panel-caption">
+            ℹ️ <b>What does this mean?</b> Attackers target specific services: Port 22 (SSH Brute Force), Port 80/443 (Web Exploits & C2), Port 53 (DNS amplification).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: LIVE MONITOR & BLOOM IP CHECKER   -->
+    <!-- ========================================== -->
+    <section id="view-live" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Live Threat Monitor & IP Checker</h1>
+        <p class="page-desc">Instant sub-microsecond IOC membership queries and real-time streaming sliding window stats.</p>
+      </div>
+
+      <!-- Interactive Bloom Filter IP Checker -->
+      <div class="card-panel">
+        <div class="panel-title">🔍 Instant Threat IOC Checker (Bloom Filter)</div>
+        <p style="color: #94A3B8; font-size: 0.88rem;">
+          Query external IPs or domains against millions of malicious threat feeds in constant time <b>O(1)</b> with <b>zero false negatives</b>:
+        </p>
+
+        <div class="preset-pills">
+          <span style="font-size: 0.78rem; color: #64748B; align-self: center;">Quick Test:</span>
+          <button class="pill-btn" data-ip="185.220.101.10">🧪 C2 Botnet (185.220.101.10)</button>
+          <button class="pill-btn" data-ip="8.8.8.8">🧪 Clean Google DNS (8.8.8.8)</button>
+          <button class="pill-btn" data-ip="194.26.29.13">🧪 Dridex Trojan (194.26.29.13)</button>
+          <button class="pill-btn" data-ip="127.0.0.1">🧪 Localhost (127.0.0.1)</button>
+        </div>
+
+        <div class="checker-box">
+          <input type="text" id="ip-input" class="checker-input" placeholder="Enter IP address or domain (e.g. 185.220.101.10)">
+          <button class="cyber-btn" onclick="checkIP()">Scan Address</button>
+        </div>
+
+        <div id="check-result" class="result-card"></div>
+      </div>
+
+      <!-- Real-Time DGIM Sliding Window & Stream Ticker -->
+      <div class="grid-2col">
+        <div class="card-panel">
+          <div class="panel-title">📈 Sliding Window Attacks (DGIM)</div>
+          <div style="margin: 20px 0;">
+            <div style="font-size: 2.6rem; font-weight: 800; color: #00D2FF;" id="dgim-val">--</div>
+            <div style="color: #94A3B8; font-size: 0.88rem;">attacks in last 2,000 stream events</div>
+          </div>
+          <div class="panel-caption">
+            ℹ️ <b>How DGIM works:</b> Rather than storing thousands of unbounded stream events in RAM, DGIM groups them into exponential buckets, saving 93% memory with an error provably bounded by &le; 50%.
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <div class="panel-title">🔴 Live Stream Ticker (Reservoir Sample)</div>
+          <table class="cyber-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source IP</th>
+                <th>Destination</th>
+                <th>Port</th>
+                <th>Classification</th>
+              </tr>
+            </thead>
+            <tbody id="stream-tbody">
+              <tr><td colspan="5" style="color: #94A3B8;">Loading stream events...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: ATTACK PATTERNS (CLUSTERS)        -->
+    <!-- ========================================== -->
+    <section id="view-clusters" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Behavioral Attack Patterns & Clusters</h1>
+        <p class="page-desc">Unsupervised behavioral pattern discovery on network flows via K-Means and DBSCAN.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">🧩 Interpreted Behavioral Flow Clusters</div>
+        <p style="color: #94A3B8; font-size: 0.88rem;">Each cluster represents an automatically discovered group of flows exhibiting shared statistical traits:</p>
+        <div id="cluster-cards-container" class="cluster-cards-grid">
+          <div>Loading cluster profiles...</div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">🕵️ Density-Based Outlier Detection (DBSCAN)</div>
+        <div class="kpi-grid" style="margin-top: 14px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Dense Attack Clusters</div>
+            <div id="dbscan-clusters" class="kpi-value" style="color: #00D2FF;">3</div>
+            <div class="kpi-sub" style="color: #94A3B8;">High density cores</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Isolated Outliers</div>
+            <div id="dbscan-noise" class="kpi-value" style="color: #FF2A85;">150</div>
+            <div class="kpi-sub" style="color: #94A3B8;">Potential Zero-Days</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Outlier Percentage</div>
+            <div id="dbscan-pct" class="kpi-value" style="color: #F472B6;">3.0%</div>
+            <div class="kpi-sub" style="color: #94A3B8;">Noise density</div>
+          </div>
+        </div>
+        <div class="panel-caption">
+          ℹ️ <b>Why DBSCAN matters:</b> Spherical clustering (K-Means) forces all points into clusters. DBSCAN explicitly isolates irregular attack shapes and separates rare zero-day anomalies.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 4: GLOBAL GEO-MAP                    -->
+    <!-- ========================================== -->
+    <section id="view-geo" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Global Threat Geo-Distribution</h1>
+        <p class="page-desc">Geographic origin countries and autonomous systems (ASNs) generating attack traffic.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">📍 Attack Volume by Origin Country</div>
+        <table class="cyber-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>ISO Code</th>
+              <th>Total Attacks</th>
+              <th>Primary Attack Vector</th>
+            </tr>
+          </thead>
+          <tbody id="geo-tbody">
+            <tr><td colspan="4" style="color: #94A3B8;">Loading geographic distribution...</td></tr>
+          </tbody>
+        </table>
+        <div class="panel-caption">
+          ℹ️ <b>Threat Note:</b> Attack origins reflect infected botnet hosts and compromised residential proxy relays utilized by threat actors.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: THREAT INFRASTRUCTURE GRAPH       -->
+    <!-- ========================================== -->
+    <section id="view-graph" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Threat Infrastructure & PageRank Centrality</h1>
+        <p class="page-desc">Network link analysis identifying "Kingpin" servers whose disruption dismantles the botnet chain.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">👑 Top Kingpin Infrastructure Nodes (PageRank)</div>
+        <table class="cyber-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Node Identifier</th>
+              <th>Node Type</th>
+              <th>PageRank Score</th>
+              <th>In-Degree</th>
+              <th>Out-Degree</th>
+            </tr>
+          </thead>
+          <tbody id="kingpins-tbody">
+            <tr><td colspan="6" style="color: #94A3B8;">Loading kingpin servers...</td></tr>
+          </tbody>
+        </table>
+        <div class="panel-caption">
+          ℹ️ <b>Why PageRank?</b> Threat actors use multi-tier infrastructure (redirectors, compromised routers). High PageRank scores indicate central servers orchestrating multiple attack campaigns.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 6: ASSOCIATION RULES (FP-GROWTH)     -->
+    <!-- ========================================== -->
+    <section id="view-rules" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Threat Association Rules & Pattern Mining</h1>
+        <p class="page-desc">Actionable if-then causal threat patterns mined via FP-Growth and Apriori.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">🧠 Discovered Causal Attack Rules</div>
+        <div id="rules-container" style="margin-top: 14px;">
+          <div>Loading mined association rules...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 7: ALGORITHM BENCHMARKS              -->
+    <!-- ========================================== -->
+    <section id="view-benchmarks" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Big Data Algorithm Benchmarks & Proofs</h1>
+        <p class="page-desc">Empirical proof of sub-linear space, speedups, and mathematical error bounds.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">⚡ Empirical Performance Proofs (25,000 Flows & 1,737 IOCs)</div>
+        <table class="cyber-table">
+          <thead>
+            <tr>
+              <th>Benchmark Experiment</th>
+              <th>Traditional Baseline</th>
+              <th>Big Data Algorithm</th>
+              <th>Optimization Gain</th>
+            </tr>
+          </thead>
+          <tbody id="benchmarks-tbody">
+            <tr><td colspan="4" style="color: #94A3B8;">Loading benchmark metrics...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 8: THREAT ACADEMY                    -->
+    <!-- ========================================== -->
+    <section id="view-academy" class="view-section">
+      <div class="page-header">
+        <h1 class="page-title">Cyber Threat Intelligence Academy</h1>
+        <p class="page-desc">Everyday analogies explaining complex cyber attacks and Big Data algorithms in plain English.</p>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-title">📖 Attacks Explained with Everyday Analogies</div>
+        
+        <div class="accordion-item open">
+          <div class="accordion-header">
+            <span>🛡️ Phishing — "A fake bank letter asking for your PIN"</span>
+            <span>▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>Plain English:</b> Attackers send fraudulent communications (emails, fake login sites) pretending to come from trusted companies (PayPal, Bank) to trick you into revealing passwords.<br>
+            <b>MITRE ATT&CK:</b> <code>T1566 - Phishing</code> | <b>Defense:</b> Deploy Multi-Factor Authentication (MFA) and email domain verification (DMARC).
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>🛡️ Botnet / C2 — "A remote-controlled zombie army"</span>
+            <span>▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>Plain English:</b> Malware infects thousands of computers and smart devices, turning them into 'bots' that obey commands from a central hacker server to launch coordinated strikes.<br>
+            <b>MITRE ATT&CK:</b> <code>T1071 - Application Layer Protocol: C2</code> | <b>Defense:</b> Block C2 IPs using edge Bloom filters and inspect egress beaconing.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>🛡️ DDoS — "Thousands of people blocking a shop entrance"</span>
+            <span>▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>Plain English:</b> Attackers flood a web server with millions of fake requests until the server runs out of memory and crashes for real customers.<br>
+            <b>MITRE ATT&CK:</b> <code>T1498 - Network Denial of Service</code> | <b>Defense:</b> Cloud DDoS scrubbing (Cloudflare) and SYN flood cookies.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>🛡️ Brute Force — "Trying every key on a massive keyring"</span>
+            <span>▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>Plain English:</b> Automated scripts guess passwords hundreds of times per second against SSH or login screens until they crack the right password.<br>
+            <b>MITRE ATT&CK:</b> <code>T1110 - Brute Force</code> | <b>Defense:</b> Account lockout after 5 attempts, Fail2Ban, strong passphrases.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span>🛡️ Port Scan — "A burglar checking every door and window"</span>
+            <span>▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>Plain English:</b> Attackers send quick probe packets across all 65,535 network ports to see which services are open and might have vulnerable software.<br>
+            <b>MITRE ATT&CK:</b> <code>T1046 - Network Service Discovery</code> | <b>Defense:</b> Stealth firewall rules and automated IP blacklisting.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
