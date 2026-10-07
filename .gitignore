@@ -40,3 +40,6 @@ data/stream/*.txt
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Spark generated output folders
+data/clean/spark_logs.parquet/
